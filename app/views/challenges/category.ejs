@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+
+<div class="mb-8">
+  <a href="/dashboard" class="text-sm text-indigo-400 hover:underline mb-2 inline-block">← بازگشت به داشبورد</a>
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <span class="text-indigo-400 font-bold"><%= code %></span>
+      <h1 class="text-3xl font-bold"><%= categoryName %></h1>
+    </div>
+    <div class="text-left">
+      <div class="text-3xl font-bold <%= percent === 100 ? 'text-green-400' : '' %>"><%= percent %>%</div>
+      <div class="text-sm text-gray-400"><%= solved %> از <%= total %> حل‌شده</div>
+    </div>
+  </div>
+  <div class="w-full bg-raven-800 rounded-full h-2.5 mt-4">
+    <div class="progress-bar h-2.5 rounded-full <%= percent === 100 ? 'bg-green-500' : 'bg-indigo-500' %>" style="width: <%= percent %>%"></div>
+  </div>
+</div>
+
+<div class="space-y-4">
+  <% challenges.forEach((ch, idx) => { 
+    const diffColor = ch.difficulty === 'easy' ? 'green' : ch.difficulty === 'medium' ? 'yellow' : 'red';
+    const diffLabel = ch.difficulty === 'easy' ? 'آسان' : ch.difficulty === 'medium' ? 'متوسط' : 'سخت';
+  %>
+    <a href="/challenges/<%= ch.slug %>" class="block bg-raven-900 border border-raven-700 hover:border-indigo-500/40 rounded-xl p-5 transition group">
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-raven-800 flex items-center justify-center font-bold text-gray-400 group-hover:text-indigo-400">
+          <%= idx + 1 %>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-2 mb-1">
+            <h3 class="font-semibold text-lg group-hover:text-indigo-300 transition"><%= ch.title %></h3>
+            <% if (ch.solved) { %>
+              <span class="text-xs bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full">✓ حل‌شده</span>
+            <% } %>
+            <span class="text-xs bg-<%= diffColor %>-500/20 text-<%= diffColor %>-300 px-2 py-0.5 rounded-full"><%= diffLabel %></span>
+            <span class="text-xs text-gray-500"><%= ch.points %> امتیاز</span>
+          </div>
+          <p class="text-sm text-gray-400 line-clamp-2"><%= ch.description %></p>
+        </div>
+        <div class="text-indigo-400 opacity-0 group-hover:opacity-100 transition">←</div>
+      </div>
+    </a>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

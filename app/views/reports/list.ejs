@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+
+<div class="flex items-center justify-between mb-8">
+  <div>
+    <h1 class="text-3xl font-bold">گزارش‌های من</h1>
+    <p class="text-gray-400 mt-1">تاریخچه گزارش‌های ثبت‌شده</p>
+  </div>
+  <a href="/reports/new" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl font-medium transition">
+    + گزارش جدید
+  </a>
+</div>
+
+<% if (reports.length === 0) { %>
+  <div class="bg-raven-900 border border-raven-700 rounded-2xl p-12 text-center">
+    <div class="text-4xl mb-4">📭</div>
+    <p class="text-gray-400 mb-4">هنوز گزارشی ثبت نکرده‌ای</p>
+    <a href="/reports/new" class="text-indigo-400 hover:underline">اولین گزارش را بنویس</a>
+  </div>
+<% } else { %>
+  <div class="space-y-3">
+    <% reports.forEach(r => { %>
+      <a href="/reports/<%= r.id %>" class="block bg-raven-900 border border-raven-700 hover:border-indigo-500/40 rounded-xl p-5 transition">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h3 class="font-semibold text-lg"><%= r.title %></h3>
+            <div class="flex flex-wrap gap-2 mt-2 text-xs">
+              <% if (r.category) { %><span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded"><%= r.category %></span><% } %>
+              <% if (r.severity) { %><span class="bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded"><%= r.severity %></span><% } %>
+              <span class="text-gray-500">کیفیت: <%= r.quality_score %></span>
+            </div>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full 
+            <%= r.status === 'accepted' ? 'bg-green-500/20 text-green-300' : 
+                r.status === 'rejected' ? 'bg-red-500/20 text-red-300' : 'bg-yellow-500/20 text-yellow-300' %>">
+            <%= r.status %>
+          </span>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>

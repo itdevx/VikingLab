@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+<div class="text-center py-6 sm:py-10">
+  <p class="text-xs mb-3" style="color:var(--vk-gold)">⚔️ Viking Lab · itdevx</p>
+  <h1 class="text-3xl sm:text-5xl font-extrabold mb-3">
+    <span class="vk-brand-gold">Viking Lab</span>
+  </h1>
+  <p class="text-sm mx-auto max-w-md mb-6 px-2" style="color:var(--vk-muted)">
+    میدان تمرین تست نفوذ وب و شبکه — چالش، کلَن، جنگ و گزارش‌نویسی.
+  </p>
+  <div class="flex flex-wrap justify-center gap-2 mb-8">
+    <% if (typeof user !== 'undefined' && user) { %>
+      <a href="/dashboard" class="vk-btn vk-btn-gold">داشبورد</a>
+    <% } else { %>
+      <a href="/auth/register" class="vk-btn vk-btn-gold">شروع</a>
+      <a href="/auth/login" class="vk-btn">ورود</a>
+    <% } %>
+    <a href="/lab" class="vk-btn">محیط هدف</a>
+    <a href="/academy" class="vk-btn">آکادمی</a>
+  </div>
+  <div class="lab-grid text-right">
+    <a href="/lab" class="lab-card"><span class="icon">🎯</span><h3>هدف‌های وب</h3><p>فروشگاه، ترید، بلاگ</p></a>
+    <a href="/lab/war" class="lab-card"><span class="icon">⚔️</span><h3>WarOps</h3><p>چالش جنگ کلَن</p></a>
+    <a href="/lab/network" class="lab-card"><span class="icon">🌐</span><h3>شبکه</h3><p>پورت و DNS</p></a>
+    <a href="/academy" class="lab-card"><span class="icon">📜</span><h3>آکادمی</h3><p>آموزش OWASP</p></a>
+    <a href="/clans" class="lab-card"><span class="icon">🏰</span><h3>کلَن</h3><p>تیم و جام</p></a>
+    <a href="/clans/wars" class="lab-card"><span class="icon">🛡️</span><h3>جنگ</h3><p>مهاجم و مدافع</p></a>
+  </div>
+</div>
+<%- include('partials/footer') %>

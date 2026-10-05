@@ -1,0 +1,23 @@
+<%- include('../partials/header') %>
+<div class="mb-6"><a href="/clans" class="text-sm text-indigo-400 hover:underline">← کلَن‌ها</a></div>
+<h1 class="text-2xl font-bold mb-2">درخواست‌های عضویت</h1>
+<p class="text-sm text-gray-400 mb-6">فقط لیدر کلَن این لیست را می‌بیند و می‌تواند قبول یا رد کند.</p>
+<% if (!pending.length) { %>
+  <div class="bg-raven-900 border border-raven-700 rounded-2xl p-10 text-center text-gray-500">درخواست معلقی نیست</div>
+<% } else { %>
+  <div class="space-y-3">
+    <% pending.forEach(r => { %>
+      <div class="bg-raven-900 border border-amber-500/20 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <div class="font-semibold"><%= r.username %> <span class="text-amber-400 text-sm"><%= r.trophies %> 🏆</span></div>
+          <div class="text-xs text-gray-500">کلَن: <%= r.clan_name %> #<%= r.clan_tag %> · <%= new Date(r.created_at).toLocaleString('fa-IR') %></div>
+        </div>
+        <div class="flex gap-2">
+          <form method="POST" action="/clans/requests/<%= r.id %>/accept"><button class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-sm">قبول</button></form>
+          <form method="POST" action="/clans/requests/<%= r.id %>/reject"><button class="border border-red-500/40 text-red-300 px-4 py-2 rounded-xl text-sm">رد</button></form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+<%- include('../partials/footer') %>

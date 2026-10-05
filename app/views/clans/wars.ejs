@@ -1,0 +1,103 @@
+<%- include('../partials/header') %>
+<div class="mb-6"><a href="/clans" class="text-sm text-indigo-400 hover:underline">← کلَن‌ها</a></div>
+<h1 class="text-3xl font-bold mb-2">⚔️ جنگ کلَن‌ها</h1>
+<p class="text-gray-400 text-sm mb-6 max-w-2xl">
+  یک کلَن <strong class="text-red-300">مهاجم (Attacker)</strong> و دیگری <strong class="text-blue-300">مدافع (Defender)</strong> است.
+  در مدت جنگ، هر فلگی که اعضای هر تیم در <strong class="text-white">همین Labها و چالش‌های Viking Lab</strong> ثبت کنند، برای تیمشان امتیاز جنگ می‌شود.
+  در پایان، تیمی که امتیاز بیشتری دارد برنده است و ۵۰ جام کلَن می‌گیرد.
+</p>
+
+<div class="bg-raven-900 border border-red-500/25 rounded-2xl p-6 mb-8">
+  <h2 class="font-semibold mb-2 text-red-300">چالش‌های اختصاصی جنگ (متوسط → سخت)</h2>
+  <p class="text-sm text-gray-400 mb-4">فقط حل این‌ها در بازه جنگ برای کلَن امتیاز می‌آورد. راهنما داخل هر چالش است و با باز کردن از امتیاز کم می‌شود.</p>
+  <div class="flex flex-wrap gap-2">
+    <a href="/lab/war" target="_blank" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-medium">باز کردن اپ WarOps</a>
+    <a href="/challenges/category/WAR" class="border border-red-500/40 text-red-300 px-4 py-2 rounded-xl text-sm">لیست چالش‌های WAR</a>
+  </div>
+</div>
+
+<% if (error) { %><div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-sm"><%= error %></div><% } %>
+
+<% if (isLeader && myClanId) { %>
+<div class="bg-raven-900 border border-red-500/30 rounded-2xl p-6 mb-8">
+  <h2 class="font-semibold mb-3">درخواست جنگ (فقط لیدر) — بعد از تأیید لیدر حریف شروع می‌شود</h2>
+  <form method="POST" action="/clans/wars/declare" class="flex flex-wrap gap-3 items-end">
+    <div>
+      <label class="text-xs text-gray-500">کلَن مدافع</label>
+      <select name="defender_id" required class="block mt-1 bg-raven-800 border border-raven-600 rounded-xl px-4 py-2.5 min-w-[200px]">
+        <% clans.filter(c => c.id !== myClanId).forEach(c => { %>
+          <option value="<%= c.id %>"><%= c.badge %> <%= c.name %> #<%= c.tag %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div>
+      <label class="text-xs text-gray-500">مدت (ساعت)</label>
+      <select name="hours" class="block mt-1 bg-raven-800 border border-raven-600 rounded-xl px-4 py-2.5">
+        <option value="0.5">۳۰ دقیقه</option>
+        <option value="1">۱ ساعت</option>
+        <option value="1.5">۱٫۵ ساعت</option>
+        <option value="2" selected>۲ ساعت</option>
+      </select>
+    </div>
+    <button class="bg-red-600 hover:bg-red-500 text-white px-6 py-2.5 rounded-xl font-medium">ارسال درخواست جنگ</button>
+  </form>
+</div>
+<% } %>
+
+
+<% if (typeof pending !== "undefined" && pending.length) { %>
+<h2 class="font-semibold mb-3 mt-6">درخواست‌های در انتظار</h2>
+<div class="space-y-3 mb-8">
+  <% pending.forEach(w => {
+    const a = clans.find(c => c.id === w.attacker_id);
+    const d = clans.find(c => c.id === w.defender_id);
+  %>
+    <a href="/clans/wars/<%= w.id %>" class="block vk-card border border-amber-500/30 hover:border-amber-500/50">
+      <div class="flex flex-wrap justify-between gap-2 text-sm">
+        <span><span class="text-red-400"><%= a ? a.name : "?" %></span> → <span class="text-blue-400"><%= d ? d.name : "?" %></span></span>
+        <span class="text-amber-300 text-xs">⏳ در انتظار تأیید</span>
+      </div>
+    </a>
+  <% }) %>
+</div>
+<% } %>
+
+<h2 class="font-semibold mb-3">جنگ‌های فعال</h2>
+<div class="space-y-3 mb-8">
+  <% const show = active.length ? active : []; %>
+  <% if (!show.length) { %><p class="text-gray-500 text-sm">جنگ فعالی نیست</p><% } %>
+  <% show.forEach(w => {
+    const a = clans.find(c => c.id === w.attacker_id);
+    const d = clans.find(c => c.id === w.defender_id);
+  %>
+    <a href="/clans/wars/<%= w.id %>" class="block bg-raven-900 border border-red-500/20 hover:border-red-500/40 rounded-2xl p-5">
+      <div class="flex flex-wrap justify-between gap-3 items-center">
+        <div class="text-sm">
+          <span class="text-red-300 font-semibold"><%= a ? a.name : '?' %></span>
+          <span class="text-gray-500 mx-2">مهاجم</span>
+          <span class="text-gray-600">vs</span>
+          <span class="text-gray-500 mx-2">مدافع</span>
+          <span class="text-blue-300 font-semibold"><%= d ? d.name : '?' %></span>
+        </div>
+        <div class="font-mono text-sm">
+          <span class="text-red-400"><%= w.score_attacker || 0 %></span>
+          <span class="text-gray-600"> : </span>
+          <span class="text-blue-400"><%= w.score_defender || 0 %></span>
+        </div>
+      </div>
+    </a>
+  <% }) %>
+</div>
+
+<% if (myWars && myWars.length) { %>
+<h2 class="font-semibold mb-3">تاریخچه کلَن تو</h2>
+<div class="space-y-2">
+  <% myWars.forEach(w => { %>
+    <a href="/clans/wars/<%= w.id %>" class="block bg-raven-900 border border-raven-700 rounded-xl px-4 py-3 text-sm flex justify-between">
+      <span>#<%= w.id %> · <%= w.status %></span>
+      <span class="font-mono"><%= w.score_attacker || 0 %> : <%= w.score_defender || 0 %></span>
+    </a>
+  <% }) %>
+</div>
+<% } %>
+<%- include('../partials/footer') %>

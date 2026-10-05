@@ -1,0 +1,151 @@
+<%- include('partials/header') %>
+
+<div class="mb-8">
+  <div class="vk-rune text-2xl mb-2">📜</div>
+  <h1 class="text-3xl font-extrabold vk-brand-gold mb-2">آکادمی Viking Lab</h1>
+  <p class="text-sm max-w-2xl leading-relaxed" style="color:var(--vk-muted)">
+    توضیح ساده و کامل آسیب‌پذیری‌ها، ابزار لازم، و روش کشف — مثل یک راهنمای آموزشی واقعی.
+  </p>
+</div>
+
+<div class="grid lg:grid-cols-4 gap-6">
+<aside class="lg:col-span-1">
+  <div class="vk-card p-4 sticky top-16 text-sm space-y-1" style="color:var(--vk-muted)">
+    <div class="font-bold mb-2" style="color:var(--vk-gold)">فهرست</div>
+    <a class="block hover:opacity-100 opacity-70" href="#start">شروع</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a01">A01 کنترل دسترسی</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a02">A02 رمزنگاری</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a03">A03 تزریق</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a04">A04 طراحی ناامن</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a05">A05 پیکربندی</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a06">A06 کامپوننت قدیمی</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a07">A07 احراز هویت</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a08">A08 یکپارچگی</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a09">A09 لاگ</a>
+    <a class="block hover:opacity-100 opacity-70" href="#a10">A10 SSRF</a>
+    <a class="block hover:opacity-100 opacity-70" href="#modern">آسیب‌پذیری‌های جدید</a>
+    <a class="block hover:opacity-100 opacity-70" href="#methods">روش‌های کشف</a>
+    <a class="block hover:opacity-100 opacity-70" href="#tools">ابزارها</a>
+  </div>
+</aside>
+
+<article class="lg:col-span-3 space-y-6 text-sm leading-7" style="color:var(--vk-muted)">
+
+<section id="start" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-text)">چطور از این آکادمی استفاده کنی؟</h2>
+  <p>هر بخش سه لایه دارد: <strong style="color:var(--vk-text)">مفهوم ساده</strong>، <strong style="color:var(--vk-text)">چطور پیدا کنی</strong>، <strong style="color:var(--vk-text)">چه ابزاری</strong>. بعد همان را در Lab تمرین کن. فلگ را عیناً در فرم چالش بفرست.</p>
+</section>
+
+<section id="a01" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A01 — Broken Access Control</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> سرور باید قبل از نشان دادن داده یا انجام کار، چک کند «آیا این کاربر اجازه دارد؟». اگر فقط با عوض کردن شماره در آدرس، صفحهٔ دیگران باز شود، کنترل دسترسی شکسته است (معمولاً IDOR).</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">انواع رایج:</strong> IDOR افقی (کاربر به کاربر)، عمودی (کاربر به ادمین)، Force Browsing (مسیر مخفی)، Mass Assignment (فرستادن فیلد role)، API بدون چک نقش.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">چطور کشف کنی:</strong> همه پارامترهای id/uuid/order را یکی‌یکی عوض کن. با حساب معمولی به API ادمین درخواست بزن. مسیرهای /admin را fuzz کن.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">ابزار:</strong> Burp (Repeater)، Autorize، ffuf، Postman</p>
+  <p><strong style="color:var(--vk-text)">Lab:</strong> <code>/lab/shop/profile?id=</code> · <code>/lab/shop/orders</code> · <code>/lab/shop/admin</code></p>
+</section>
+
+<section id="a02" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A02 — Cryptographic Failures</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> داده حساس باید درست رمز شود. هش ضعیف (مثل MD5 برای رمز)، secret در فایل JS، توکن در URL، TLS ضعیف یعنی شکست رمزنگاری.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">کشف:</strong> سورس JS را برای apiKey/secret بگرد. هدر و کوکی را ببین. آیا رمز با MD5/SHA1 ذخیره شده؟</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">ابزار:</strong> DevTools، jwt_tool، hashcat، Burp</p>
+  <p><strong style="color:var(--vk-text)">Lab:</strong> هدرهای shop · TRADE_CONFIG در JS ترید · reset token در بلاگ</p>
+</section>
+
+<section id="a03" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A03 — Injection</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> ورودی تو مثل دستور برای سرور اجرا می‌شود. SQL، دستور سیستم، XSS (اجرا در مرورگر قربانی)، NoSQL، قالب (SSTI).</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">SQL:</strong> در فیلدها <code>'</code> بگذار؛ اگر خطا یا رفتار عجیب دیدی، <code>' OR 1=1 --</code> را تست کن.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">XSS:</strong> <code>&lt;script&gt;</code> یا <code>&lt;img onerror=...&gt;</code> در جستجو/نظر. اگر در صفحه منعکس یا ذخیره شد، آسیب‌پذیر است.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">Command:</strong> در فیلد host کاراکترهای <code>; | &amp; $()</code></p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">ابزار:</strong> Burp، sqlmap (بعد از تأیید دستی)، commix، مرورگر</p>
+  <p><strong style="color:var(--vk-text)">Lab:</strong> search، admin-login، product comments، ping، war beacon</p>
+</section>
+
+<section id="a04" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A04 — Insecure Design</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> منطق کسب‌وکار اشتباه است: قیمت از کلاینت می‌آید، کوپن بی‌نهایت، race روی موجودی/انتقال پول.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">کشف:</strong> درخواست checkout را در Burp عوض کن (price/qty). چند درخواست همزمان برای transfer بفرست.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">ابزار:</strong> Burp Intruder، اسکریپت Python/turbo intruder</p>
+  <p><strong style="color:var(--vk-text)">Lab:</strong> cart/checkout · trade/transfer · war/supply</p>
+</section>
+
+<section id="a05" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A05 — Security Misconfiguration</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> تنظیمات پیش‌فرض خطرناک: directory listing، صفحه خطا با stack، هدرهای پرحرف، پنل بدون محدودیت IP.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">کشف:</strong> مسیر /uploads، /.git، هدرهای پاسخ، /debug</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">ابزار:</strong> nikto، nmap، dirsearch، مرورگر DevTools</p>
+</section>
+
+<section id="a06" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A06 — Vulnerable & Outdated Components</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> کتابخانه قدیمی با CVE شناخته‌شده (مثلاً jQuery خیلی قدیمی، Log4j).</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">کشف:</strong> نسخه در هدر/فایل JS · nuclei · retire.js</p>
+  <p><strong style="color:var(--vk-text)">Lab:</strong> jQuery در shop · شبیه‌سازی log4j در trade</p>
+</section>
+
+<section id="a07" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A07 — Identification & Authentication Failures</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> ورود ضعیف: رمز پیش‌فرض، پیام‌هایی که مشخص می‌کند کاربر وجود دارد، JWT بدون انقضا، MFA فقط سمت مرورگر، OAuth با redirect آزاد.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">ابزار:</strong> Hydra، Burp، jwt_tool</p>
+</section>
+
+<section id="a08" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A08 — Software & Data Integrity Failures</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> آپدیت/وب‌هوک بدون امضا، secret در CI، وابستگی جعلی، deserialization ناامن.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">Lab:</strong> webhook پرداخت · ci-logs بلاگ · package-info</p>
+</section>
+
+<section id="a09" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A09 — Security Logging & Monitoring Failures</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> حمله ثبت نمی‌شود، یا رمز داخل لاگ است، یا می‌توانی با خط جدید در لاگ جعل کنی (log injection).</p>
+</section>
+
+<section id="a10" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">A10 — SSRF</h2>
+  <p class="mb-2"><strong style="color:var(--vk-text)">به زبان ساده:</strong> سرور به آدرسی که تو می‌دهی درخواست می‌زند. می‌توانی سرویس داخلی یا metadata ابر را بخوانی.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">کشف:</strong> هر پارامتر URL را به 127.0.0.1، 169.254.169.254، file:// بده. blacklist را با 127.1 یا decimal IP دور بزن.</p>
+  <p class="mb-2"><strong style="color:var(--vk-text)">ابزار:</strong> Burp Collaborator، ffuf</p>
+  <p><strong style="color:var(--vk-text)">Lab:</strong> /lab/shop/preview · /lab/war/relay</p>
+</section>
+
+<section id="modern" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">آسیب‌پذیری‌های جدیدتر و مرتبط</h2>
+  <ul class="list-disc list-inside space-y-2">
+    <li><strong style="color:var(--vk-text)">Prototype Pollution:</strong> آلودگی __proto__ در JS و ارتقای نقش</li>
+    <li><strong style="color:var(--vk-text)">GraphQL Abuse:</strong> introspection و دسترسی به فیلدهای محرمانه</li>
+    <li><strong style="color:var(--vk-text)">JWT attacks:</strong> alg none، secret ضعیف، بدون exp</li>
+    <li><strong style="color:var(--vk-text)">Race conditions:</strong> شرط مسابقه روی موجودی و پرداخت</li>
+    <li><strong style="color:var(--vk-text)">CI/CD secrets:</strong> نشت کلید در لاگ بیلد</li>
+    <li><strong style="color:var(--vk-text)">Host Header poisoning:</strong> لینک بازیابی رمز روی دامنه مهاجم</li>
+  </ul>
+</section>
+
+<section id="methods" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">روش‌های کلی کشف (برای همه نوع)</h2>
+  <ol class="list-decimal list-inside space-y-2">
+    <li><strong style="color:var(--vk-text)">نقشه سطح حمله:</strong> همه فرم‌ها، API، پارامترها، آپلود، وب‌هوک</li>
+    <li><strong style="color:var(--vk-text)">تغییر ورودی:</strong> طول، نوع، کاراکتر خاص، JSON تودرتو</li>
+    <li><strong style="color:var(--vk-text)">مقایسه نقش‌ها:</strong> درخواست کاربر عادی روی endpoint ادمین</li>
+    <li><strong style="color:var(--vk-text)">بازتولید در Proxy:</strong> همیشه با Burp تکرار کن تا تصادفی نباشد</li>
+    <li><strong style="color:var(--vk-text)">اتوماسیون هدفمند:</strong> فقط بعد از تأیید دستی (sqlmap، nuclei)</li>
+  </ol>
+</section>
+
+<section id="tools" class="vk-card p-6">
+  <h2 class="text-lg font-bold mb-2" style="color:var(--vk-gold)">جعبه ابزار پیشنهادی</h2>
+  <div class="grid sm:grid-cols-2 gap-3 mt-3">
+    <div class="p-3 rounded-xl border border-[var(--vk-border)]"><strong style="color:var(--vk-text)">Burp Suite</strong><p class="text-xs mt-1">Proxy، Repeater، Intruder</p></div>
+    <div class="p-3 rounded-xl border border-[var(--vk-border)]"><strong style="color:var(--vk-text)">nmap</strong><p class="text-xs mt-1">پورت و سرویس</p></div>
+    <div class="p-3 rounded-xl border border-[var(--vk-border)]"><strong style="color:var(--vk-text)">sqlmap</strong><p class="text-xs mt-1">بعد از SQLi دستی</p></div>
+    <div class="p-3 rounded-xl border border-[var(--vk-border)]"><strong style="color:var(--vk-text)">ffuf / gobuster</strong><p class="text-xs mt-1">کشف مسیر</p></div>
+    <div class="p-3 rounded-xl border border-[var(--vk-border)]"><strong style="color:var(--vk-text)">jwt_tool</strong><p class="text-xs mt-1">حمله به JWT</p></div>
+    <div class="p-3 rounded-xl border border-[var(--vk-border)]"><strong style="color:var(--vk-text)">nuclei</strong><p class="text-xs mt-1">قالب CVE</p></div>
+  </div>
+  <a href="/challenges/category/TOOLS" class="inline-block mt-4 text-sm" style="color:var(--vk-gold)">چالش‌های تمرین ابزار →</a>
+</section>
+
+</article>
+</div>
+<%- include('partials/footer') %>

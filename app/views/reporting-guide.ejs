@@ -1,0 +1,70 @@
+<%- include('partials/header') %>
+
+<div class="max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold mb-2">📝 اصول گزارش‌نویسی حرفه‌ای</h1>
+  <p class="text-gray-400 mb-8">یاد بگیر مثل شکارچیان حرفه‌ای HackerOne و Bugcrowd گزارش بنویسی</p>
+
+  <div class="space-y-6">
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h2 class="text-xl font-semibold mb-3 text-indigo-300">۱. عنوان (Title)</h2>
+      <p class="text-gray-300 text-sm mb-3">باید گویا، مختصر و شامل نوع آسیب‌پذیری + محل باشد.</p>
+      <div class="bg-raven-800 rounded-lg p-3 text-sm">
+        <p class="text-green-400">✅ خوب: SQL Injection in Admin Login leading to full authentication bypass</p>
+        <p class="text-red-400 mt-2">❌ بد: باگ پیدا کردم / مشکل امنیتی</p>
+      </div>
+    </div>
+
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h2 class="text-xl font-semibold mb-3 text-indigo-300">۲. سناریو و مراحل بازتولید (Steps to Reproduce)</h2>
+      <p class="text-gray-300 text-sm mb-3">قدم‌به‌قدم طوری بنویس که هر کسی بتواند عیناً تکرار کند.</p>
+      <pre class="bg-raven-800 rounded-lg p-4 text-sm text-gray-300 whitespace-pre-wrap">1. به آدرس http://target/lab/a03/login برو
+2. در فیلد username مقدار زیر را وارد کن:
+   ' OR 1=1 --
+3. در فیلد password هر چیزی بگذار
+4. روی دکمه ورود کلیک کن
+5. مشاهده می‌شود که بدون رمز معتبر وارد پنل ادمین می‌شوی</pre>
+    </div>
+
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h2 class="text-xl font-semibold mb-3 text-indigo-300">۳. تأثیر (Impact)</h2>
+      <p class="text-gray-300 text-sm">چه کسی می‌تواند exploit کند؟ چه داده‌ای لو می‌رود؟ چه عملیاتی ممکن می‌شود؟ 
+      همیشه بدترین سناریوی واقعی را بنویس (نه تئوری محض).</p>
+    </div>
+
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h2 class="text-xl font-semibold mb-3 text-indigo-300">۴. اثبات مفهوم (PoC)</h2>
+      <p class="text-gray-300 text-sm mb-3">Request/Response کامل، اسکرین‌شات، یا ویدیو کوتاه. در گزارش متنی حداقل HTTP request را بگذار.</p>
+    </div>
+
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h2 class="text-xl font-semibold mb-3 text-indigo-300">۵. راه‌حل پیشنهادی (Remediation)</h2>
+      <p class="text-gray-300 text-sm">فقط نگویید «فیکس کنید». پیشنهاد فنی بدهید:</p>
+      <ul class="list-disc list-inside text-sm text-gray-400 mt-2 space-y-1">
+        <li>استفاده از Prepared Statements / Parameterized Queries</li>
+        <li>Output Encoding مناسب context (HTML, JS, URL)</li>
+        <li>اعمال اصل Least Privilege و بررسی دسترسی سمت سرور</li>
+      </ul>
+    </div>
+
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h2 class="text-xl font-semibold mb-3 text-indigo-300">۶. امتیاز کیفیت در Viking Lab (استاندارد باگ‌بانتی)</h2>
+      <ul class="text-sm text-gray-300 space-y-1">
+        <li>• عنوان خوب و مرتبط → +۱</li>
+        <li>• توضیحات کامل (>100 کاراکتر) → +۲</li>
+        <li>• توضیحات خیلی کامل (>300) → +۱ اضافی</li>
+        <li>• Impact واضح → +۲</li>
+        <li>• PoC → +۲</li>
+        <li>• Remediation → +۲</li>
+        <li>• Severity + CVSS + URL → هر کدام +۱</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-8 text-center">
+    <a href="/reports/new" class="inline-block bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-xl font-medium transition">
+      حالا یک گزارش بنویس
+    </a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

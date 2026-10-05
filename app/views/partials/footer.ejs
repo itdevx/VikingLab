@@ -1,0 +1,54 @@
+</main>
+<footer class="vk-footer">
+  <div class="vk-footer-grid">
+    <div>
+      <h4>⚔️ Viking Lab</h4>
+      <p>پلتفرم آموزشی تست نفوذ وب و شبکه. فقط برای تمرین قانونی و با مجوز.</p>
+    </div>
+    <div>
+      <h4>دسترسی سریع</h4>
+      <ul>
+        <li><a href="/dashboard">داشبورد</a></li>
+        <li><a href="/academy">آکادمی</a></li>
+        <li><a href="/lab">محیط‌های هدف</a></li>
+        <li><a href="/clans">کلَن‌ها</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>بیشتر</h4>
+      <ul>
+        <li><a href="/reports">ثبت گزارش</a></li>
+        <li><a href="/reporting-guide">اصول گزارش‌نویسی</a></li>
+        <li><a href="https://github.com/itdevx" target="_blank" rel="noopener">گیت‌هاب itdevx</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="vk-footer-bottom">
+    ساخته‌شده توسط <strong style="color:var(--vk-gold)">itdevx</strong>
+    · استفاده غیرمجاز از تکنیک‌ها روی سامانه‌های واقعی ممنوع است
+  </div>
+</footer>
+<script>
+(function(){
+  var btn=document.getElementById('menuBtn');
+  var menu=document.getElementById('mobileMenu');
+  if(btn&&menu){ btn.onclick=function(){ menu.classList.toggle('open'); }; }
+  // realtime-ish notifications (poll)
+  var badge=document.getElementById('notifBadge');
+  if(badge){
+    function poll(){
+      fetch('/api/notifications/unread',{credentials:'same-origin'})
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if(d&&d.count>0){ badge.style.display='flex'; badge.textContent=d.count>9?'9+':d.count; }
+          else { badge.style.display='none'; }
+        }).catch(function(){});
+    }
+    poll();
+    setInterval(poll, 8000);
+  }
+})();
+</script>
+<script src="/js/app.js"></script>
+</body>
+</html>

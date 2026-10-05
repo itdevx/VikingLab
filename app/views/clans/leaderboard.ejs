@@ -1,0 +1,34 @@
+<%- include('../partials/header') %>
+<div class="mb-6"><a href="/clans" class="text-sm text-indigo-400 hover:underline">← کلَن‌ها</a></div>
+<h1 class="text-3xl font-bold mb-2">🏆 لیدربورد کلَن‌ها</h1>
+<p class="text-gray-400 text-sm mb-8">رتبه‌بندی بر اساس جام، سطح و پیشرفت چالش‌های WAR</p>
+<% const maxT = Math.max(1, ...clans.map(c => c.trophies || 0)); %>
+<div class="space-y-4">
+  <% clans.forEach((c, i) => { 
+    const pct = Math.round(((c.trophies||0) / maxT) * 100);
+    const warPct = c.warTotal ? Math.round((c.warSolved / c.warTotal) * 100) : 0;
+  %>
+  <div class="bg-raven-900 border border-raven-700 rounded-2xl p-5 border-r-4 <%= i===0 ? 'border-r-amber-400' : 'border-r-indigo-500/50' %>">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+      <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-raven-800 flex items-center justify-center font-bold text-amber-400"><%= i+1 %></span>
+        <span class="text-2xl"><%= c.badge || '⚔️' %></span>
+        <div>
+          <a href="/clans/<%= c.id %>" class="font-bold hover:text-amber-300"><%= c.name %> <span class="text-amber-400 font-mono text-sm">#<%= c.tag %></span></a>
+          <div class="text-xs text-gray-500">سطح <%= c.level||1 %> · <%= (c.member_ids||[]).length %> عضو</div>
+        </div>
+      </div>
+      <div class="text-amber-400 font-bold text-lg"><%= c.trophies||0 %> 🏆</div>
+    </div>
+    <div class="mb-2">
+      <div class="flex justify-between text-xs text-gray-500 mb-1"><span>جام نسبی</span><span><%= pct %>%</span></div>
+      <div class="h-2 bg-raven-800 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-l from-amber-500 to-orange-500 rounded-full" style="width:<%= pct %>%"></div></div>
+    </div>
+    <div>
+      <div class="flex justify-between text-xs text-gray-500 mb-1"><span>پیشرفت WAR (اعضا)</span><span><%= c.warSolved||0 %>/<%= c.warTotal||0 %> (<%= warPct %>%)</span></div>
+      <div class="h-2 bg-raven-800 rounded-full overflow-hidden"><div class="h-2 bg-gradient-to-l from-red-500 to-rose-400 rounded-full" style="width:<%= warPct %>%"></div></div>
+    </div>
+  </div>
+  <% }) %>
+</div>
+<%- include('../partials/footer') %>

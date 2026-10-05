@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  vulnraven:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - vulnraven-data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - SESSION_SECRET=change-this-to-a-long-random-string-in-production
+    restart: unless-stopped
+
+volumes:
+  vulnraven-data:

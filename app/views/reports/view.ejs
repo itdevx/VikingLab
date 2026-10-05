@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+
+<% if (success) { %>
+  <div class="bg-green-500/10 border border-green-500/30 text-green-300 rounded-xl p-4 mb-6">
+    ✅ گزارش با موفقیت ثبت شد! امتیاز کیفیت: <strong><%= report.quality_score %></strong>
+  </div>
+<% } %>
+
+<div class="mb-6">
+  <a href="/reports" class="text-sm text-indigo-400 hover:underline">← بازگشت به لیست گزارش‌ها</a>
+</div>
+
+<div class="bg-raven-900 border border-raven-700 rounded-2xl p-8">
+  <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+    <h1 class="text-2xl font-bold"><%= report.title %></h1>
+    <span class="text-sm px-3 py-1 rounded-full 
+      <%= report.status === 'accepted' ? 'bg-green-500/20 text-green-300' : 
+          report.status === 'rejected' ? 'bg-red-500/20 text-red-300' : 'bg-yellow-500/20 text-yellow-300' %>">
+      <%= report.status %>
+    </span>
+  </div>
+
+  <div class="grid sm:grid-cols-2 gap-4 mb-6 text-sm">
+    <div><span class="text-gray-500">نوع:</span> <%= report.vulnerability_type || '—' %></div>
+    <div><span class="text-gray-500">شدت:</span> <%= report.severity || '—' %></div>
+    <div><span class="text-gray-500">CVSS:</span> <%= report.cvss || '—' %></div>
+    <div><span class="text-gray-500">امتیاز کیفیت:</span> <strong class="text-yellow-400"><%= report.quality_score %></strong></div>
+    <div class="sm:col-span-2"><span class="text-gray-500">URL:</span> <code class="text-indigo-300"><%= report.url || '—' %></code></div>
+    <% if (report.challenge_title) { %>
+      <div class="sm:col-span-2"><span class="text-gray-500">چالش:</span> 
+        <a href="/challenges/<%= report.challenge_slug %>" class="text-indigo-400 hover:underline"><%= report.challenge_title %></a>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="space-y-6">
+    <div>
+      <h3 class="text-sm font-semibold text-gray-400 mb-2">توضیحات و سناریو</h3>
+      <pre class="bg-raven-800 rounded-xl p-4 text-sm whitespace-pre-wrap font-sans text-gray-200"><%= report.description %></pre>
+    </div>
+    <% if (report.impact) { %>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-400 mb-2">تأثیر (Impact)</h3>
+        <pre class="bg-raven-800 rounded-xl p-4 text-sm whitespace-pre-wrap font-sans text-gray-200"><%= report.impact %></pre>
+      </div>
+    <% } %>
+    <% if (report.poc) { %>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-400 mb-2">اثبات مفهوم (PoC)</h3>
+        <pre class="bg-raven-800 rounded-xl p-4 text-sm whitespace-pre-wrap font-mono text-green-300 overflow-x-auto"><%= report.poc %></pre>
+      </div>
+    <% } %>
+    <% if (report.remediation) { %>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-400 mb-2">راه‌حل پیشنهادی</h3>
+        <pre class="bg-raven-800 rounded-xl p-4 text-sm whitespace-pre-wrap font-sans text-gray-200"><%= report.remediation %></pre>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

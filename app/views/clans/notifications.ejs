@@ -1,0 +1,14 @@
+<%- include('../partials/header') %>
+<div class="mb-6"><a href="/clans" class="text-sm text-indigo-400 hover:underline">← کلَن‌ها</a></div>
+<h1 class="text-2xl font-bold mb-6">اعلان‌ها</h1>
+<div class="space-y-3">
+  <% if (!list.length) { %><div class="text-gray-500 text-center py-10">اعلانی نیست</div><% } %>
+  <% list.forEach(n => { %>
+    <a href="<%= n.link || '/clans' %>" class="block bg-raven-900 border border-raven-700 rounded-xl p-4 hover:border-indigo-500/40 <%= n.read ? 'opacity-70' : 'border-indigo-500/30' %>">
+      <div class="font-semibold text-sm"><%= n.title %></div>
+      <div class="text-gray-400 text-sm mt-1"><%= n.message %></div>
+      <div class="text-xs text-gray-600 mt-2"><%= new Date(n.created_at).toLocaleString('fa-IR') %></div>
+    </a>
+  <% }) %>
+</div>
+<%- include('../partials/footer') %>

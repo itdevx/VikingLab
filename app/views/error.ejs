@@ -1,0 +1,10 @@
+<%- include('partials/header') %>
+
+<div class="text-center py-24">
+  <div class="text-8xl mb-4">💥</div>
+  <h1 class="text-4xl font-bold mb-2">خطای سرور</h1>
+  <p class="text-gray-400 mb-4"><%= typeof error !== 'undefined' ? error : 'مشکلی پیش آمد' %></p>
+  <a href="/" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl transition">بازگشت به خانه</a>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,109 @@
+<%- include('../partials/header') %>
+
+<div class="max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold mb-2">ثبت گزارش آسیب‌پذیری</h1>
+  <p class="text-gray-400 mb-8">فرم حرفه‌ای حرفه‌ای — کیفیت گزارش تو امتیاز می‌گیرد</p>
+
+  <% if (error) { %>
+    <div class="bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg p-4 mb-6"><%= error %></div>
+  <% } %>
+
+  <form method="POST" action="/reports/new" class="space-y-6 bg-raven-900 border border-raven-700 rounded-2xl p-8">
+    
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">عنوان گزارش *</label>
+      <input type="text" name="title" required value="<%= form.title || '' %>"
+             class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500"
+             placeholder="مثال: SQL Injection در صفحه لاگین ادمین منجر به دسترسی کامل">
+      <p class="text-xs text-gray-500 mt-1">عنوان باید گویا و مرتبط باشد (امتیاز کیفیت)</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">چالش مرتبط</label>
+        <select name="challenge_id" class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+          <option value="">— انتخاب اختیاری —</option>
+          <% challenges.forEach(c => { %>
+            <option value="<%= c.id %>" <%= form.challenge_id == c.id ? 'selected' : '' %>>
+              [<%= c.category %>] <%= c.title %> <%= c.solved ? '✓' : '' %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">نوع آسیب‌پذیری</label>
+        <input type="text" name="vulnerability_type" value="<%= form.vulnerability_type || '' %>"
+               class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500"
+               placeholder="SQL Injection / XSS / IDOR / ...">
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">شدت (Severity)</label>
+        <select name="severity" class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+          <option value="">— انتخاب —</option>
+          <option value="Critical">Critical</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+          <option value="Info">Info</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">CVSS (اختیاری)</label>
+        <input type="text" name="cvss" value="<%= form.cvss || '' %>"
+               class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500"
+               placeholder="9.8 / CVSS:3.1/AV:N/...">
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">URL آسیب‌پذیر</label>
+      <input type="text" name="url" value="<%= form.url || '' %>"
+             class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500"
+             placeholder="http://localhost:3000/lab/a03/login">
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">توضیحات و سناریو (Steps to Reproduce) *</label>
+      <textarea name="description" required rows="8"
+                class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 text-sm"
+                placeholder="۱. به آدرس ... برو
+۲. در فیلد username مقدار ' OR 1=1 -- را وارد کن
+۳. مشاهده می‌شود که بدون پسورد وارد پنل ادمین می‌شوی
+..."><%= form.description || '' %></textarea>
+      <p class="text-xs text-gray-500 mt-1">هرچه کامل‌تر و شفاف‌تر بنویسی امتیاز کیفیت بالاتر می‌رود</p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">تأثیر (Impact)</label>
+      <textarea name="impact" rows="3"
+                class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 text-sm"
+                placeholder="این آسیب‌پذیری به مهاجم اجازه می‌دهد بدون احراز هویت به تمام داده‌های کاربران دسترسی پیدا کند و..."><%= form.impact || '' %></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">اثبات مفهوم (PoC)</label>
+      <textarea name="poc" rows="4"
+                class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 text-sm font-mono"
+                placeholder="Request:
+POST /lab/a03/login HTTP/1.1
+...
+username=' OR 1=1 --&password=x"><%= form.poc || '' %></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-300 mb-1">راه‌حل پیشنهادی (Remediation)</label>
+      <textarea name="remediation" rows="3"
+                class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 text-sm"
+                placeholder="استفاده از Prepared Statements / Parameterized Queries و اعتبارسنجی ورودی..."><%= form.remediation || '' %></textarea>
+    </div>
+
+    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3.5 rounded-xl font-medium text-lg transition">
+      ارسال گزارش
+    </button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

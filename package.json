@@ -1,0 +1,39 @@
+{
+  "name": "viking-lab",
+  "version": "1.0.0",
+  "description": "Viking Lab by itdevx \u2014 educational pentest platform",
+  "main": "app/server.js",
+  "scripts": {
+    "start": "node app/server.js",
+    "dev": "nodemon app/server.js",
+    "seed": "node -e \"require('./app/models/seed').seedAll(true)\""
+  },
+  "keywords": [
+    "owasp",
+    "top10",
+    "vulnerable",
+    "lab",
+    "bugbounty",
+    "security"
+  ],
+  "author": "itdevx",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "optionalDependencies": {
+    "mongoose": "^8.8.0"
+  }
+}

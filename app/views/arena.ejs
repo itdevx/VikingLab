@@ -1,0 +1,37 @@
+<%- include('partials/header') %>
+
+<div class="mb-8">
+  <div class="inline-flex items-center gap-2 bg-amber-500/10 text-amber-300 px-3 py-1 rounded-full text-xs mb-3">🏆 ویژه</div>
+  <h1 class="text-3xl font-bold mb-2">آرنای ۱۰۰ امتیازی</h1>
+  <p class="text-gray-400 max-w-2xl">چالش‌های زنجیره‌ای (kill chain): از recon شبکه تا RCE و استخراج فلگ نهایی. هر زنجیره <strong class="text-amber-300">۱۰۰ امتیاز</strong> دارد.</p>
+</div>
+
+<div class="grid md:grid-cols-2 gap-6 mb-10">
+  <% const chains = [
+    { slug: 'arena-chain-shop', title: 'نفوذ به TargetCorp Shop', desc: 'Recon دامنه هدف → پورت‌های باز → SQLi لاگین ادمین → IDOR سفارش → SSRF به شبکه داخلی → فلگ نهایی', flag: 'FLAG{arena_shop_full_chain_100}', path: '/lab/shop' },
+    { slug: 'arena-chain-network', title: 'از اسکن تا شل', desc: 'کشف IP و ساب‌دامین → سرویس‌های باز (۲۲، ۳۳۰۶، ۸۰۸۰) → ورود با cred پیش‌فرض → خواندن فلگ از سرویس داخلی', flag: 'FLAG{arena_network_pwn_100}', path: '/lab/network' },
+    { slug: 'arena-chain-trade', title: 'درهم‌شکستن RavenTrade', desc: 'Secret در JS → جعل JWT → بایپس MFA → Race روی transfer → فلگ خزانه', flag: 'FLAG{arena_trade_full_chain_100}', path: '/lab/trade' },
+    { slug: 'arena-chain-blog', title: 'تسخیر RavenBlog', desc: 'UUID IDOR پست محرمانه → GraphQL secret → OAuth redirect → فلگ ادمین', flag: 'FLAG{arena_blog_full_chain_100}', path: '/lab/blog' }
+  ]; %>
+  <% chains.forEach(c => { %>
+    <div class="bg-raven-900 border border-amber-500/20 rounded-2xl p-6 flex flex-col">
+      <h2 class="text-lg font-bold mb-2"><%= c.title %></h2>
+      <p class="text-sm text-gray-400 flex-1 mb-4 leading-relaxed"><%= c.desc %></p>
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">۱۰۰ امتیاز</span>
+        <span class="text-xs bg-raven-800 text-gray-400 px-2 py-0.5 rounded">سخت · زنجیره‌ای</span>
+      </div>
+      <div class="flex gap-2">
+        <a href="<%= c.path %>" target="_blank" class="flex-1 text-center bg-amber-600 hover:bg-amber-500 text-white py-2.5 rounded-xl text-sm font-medium">شروع هدف</a>
+        <a href="/challenges/<%= c.slug %>" class="flex-1 text-center border border-amber-500/40 text-amber-300 py-2.5 rounded-xl text-sm">ثبت فلگ</a>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<div class="bg-raven-900 border border-raven-700 rounded-2xl p-6 text-sm text-gray-400">
+  <h3 class="font-semibold text-white mb-2">نکته</h3>
+  <p>فلگ‌های آرنا فقط با تکمیل زنجیره در محیط Lab به‌دست می‌آیند. راهنمایی آرنا هم مثل بقیه چالش‌ها با کسر امتیاز است. برای بخش شبکه از ترمینال روی <code class="text-cyan-400">localhost</code> و مسیرهای <code class="text-cyan-400">/lab/network/*</code> استفاده کن.</p>
+</div>
+
+<%- include('partials/footer') %>

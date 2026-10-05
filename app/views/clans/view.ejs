@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+<div class="mb-6"><a href="/clans" class="text-sm text-indigo-400 hover:underline">← همه کلَن‌ها</a></div>
+<div class="bg-gradient-to-l from-amber-600/20 to-transparent border border-amber-500/30 rounded-2xl p-6 mb-8">
+  <div class="flex items-center gap-4 mb-4">
+    <div class="text-5xl"><%= clan.badge || '⚔️' %></div>
+    <div>
+      <h1 class="text-3xl font-bold"><%= clan.name %> <span class="text-amber-400 font-mono text-lg">#<%= clan.tag %></span></h1>
+      <p class="text-gray-400 text-sm mt-1"><%= clan.description || 'بدون توضیح' %></p>
+    </div>
+  </div>
+  <div class="flex flex-wrap gap-4 text-sm">
+    <span class="bg-raven-900 px-3 py-1 rounded-lg">سطح <strong><%= clan.level || 1 %></strong></span>
+    <span class="bg-raven-900 px-3 py-1 rounded-lg"><strong class="text-amber-400"><%= clan.trophies || 0 %></strong> جام</span>
+    <span class="bg-raven-900 px-3 py-1 rounded-lg"><strong><%= (clan.member_ids||[]).length %></strong> / ۳۰ عضو</span>
+    <span class="bg-raven-900 px-3 py-1 rounded-lg">XP: <%= clan.xp || 0 %></span>
+  </div>
+  <% if (!isMember) { %>
+    <form method="POST" action="/clans/join/<%= clan.id %>" class="mt-4">
+      <button class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-xl text-sm">ارسال درخواست عضویت</button>
+    </form>
+  <% } %>
+</div>
+<h2 class="font-semibold mb-3">اعضا (بر اساس جام)</h2>
+<div class="space-y-2">
+  <% members.forEach((m, i) => { %>
+    <div class="bg-raven-900 border border-raven-700 rounded-xl px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <span class="text-gray-500 w-6"><%= i+1 %></span>
+        <span><%= m.isLeader ? '👑 ' : '' %><%= m.username %></span>
+      </div>
+      <div class="text-sm text-gray-400">
+        <span class="text-amber-400 font-medium"><%= m.trophies %> 🏆</span>
+        · <%= m.solved %> چالش · <%= m.points %> امتیاز
+      </div>
+    </div>
+  <% }) %>
+</div>
+<%- include('../partials/footer') %>

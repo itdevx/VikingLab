@@ -1,0 +1,156 @@
+<%- include('../partials/header') %>
+
+<div class="mb-6">
+  <a href="/challenges/category/<%= challenge.category %>" class="text-sm text-indigo-400 hover:underline">← بازگشت به <%= challenge.category %></a>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-8">
+  <div class="lg:col-span-2 space-y-6">
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-indigo-400 font-bold"><%= challenge.category %></span>
+        <% const diffColor = challenge.difficulty === 'easy' ? 'green' : challenge.difficulty === 'medium' ? 'yellow' : 'red';
+           const diffLabel = challenge.difficulty === 'easy' ? 'آسان' : challenge.difficulty === 'medium' ? 'متوسط' : 'سخت'; %>
+        <span class="text-xs bg-<%= diffColor %>-500/20 text-<%= diffColor %>-300 px-2 py-0.5 rounded-full"><%= diffLabel %></span>
+        <span class="text-xs text-gray-500"><%= challenge.points %> امتیاز</span>
+        <% if (challenge.solved) { %>
+          <span class="text-xs bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full">✓ حل‌شده</span>
+        <% } %>
+        <% if (hintPenalty > 0) { %>
+          <span class="text-xs bg-orange-500/20 text-orange-300 px-2 py-0.5 rounded-full">−<%= hintPenalty %> بابت راهنمایی</span>
+        <% } %>
+      </div>
+      <h1 class="text-2xl font-bold mb-4"><%= challenge.title %></h1>
+      <p class="text-gray-300 leading-relaxed"><%= challenge.description %></p>
+    </div>
+
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h2 class="text-lg font-semibold mb-3">📖 سناریو</h2>
+      <p class="text-gray-300 leading-relaxed whitespace-pre-line"><%= challenge.scenario %></p>
+    </div>
+
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h2 class="text-lg font-semibold mb-3">🎯 هدف</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">آسیب‌پذیری را پیدا و exploit کن، سپس فلگ را در همین صفحه ثبت کن. راهنمایی داخل چالش نیست — اگر گیر کردی از پنل کنار با کسر امتیاز راهنمایی بگیر.</p>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <!-- Lab Link -->
+    <div class="bg-gradient-to-b from-indigo-600/20 to-purple-600/10 border border-indigo-500/30 rounded-2xl p-6">
+      <h3 class="font-semibold mb-3">🚀 محیط آزمایش</h3>
+      <p class="text-sm text-gray-400 mb-4">صفحه آسیب‌پذیر واقعی:</p>
+      <% const labUrl = challenge.lab_path || '/lab'; %>
+      <a href="<%= labUrl %>" target="_blank" rel="noopener" class="block w-full text-center bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-medium transition">
+        باز کردن Lab ↗
+      </a>
+    </div>
+
+    <!-- Flag -->
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h3 class="font-semibold mb-3">🚩 ارسال فلگ</h3>
+      <% if (challenge.solved) { %>
+        <div class="bg-green-500/10 border border-green-500/30 text-green-300 rounded-xl p-4 text-center text-sm">
+          ✅ حل شده
+          <% if (hintPenalty > 0) { %><br><span class="text-orange-300">امتیاز خالص بعد از کسر راهنمایی محاسبه شده</span><% } %>
+        </div>
+      <% } else { %>
+        <form id="flagForm" class="space-y-3">
+          <input type="text" id="flagInput" placeholder="FLAG{...}" 
+                 class="w-full bg-raven-800 border border-raven-600 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                 autocomplete="off">
+          <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-xl font-medium transition">
+            بررسی فلگ
+          </button>
+        </form>
+        <div id="flagResult" class="mt-3 text-sm hidden"></div>
+      <% } %>
+    </div>
+
+    <!-- Hints - SEPARATE, costs points -->
+    <div class="bg-raven-900 border border-orange-500/30 rounded-2xl p-6">
+      <h3 class="font-semibold mb-2 flex items-center gap-2">
+        <span>💡</span> راهنمایی‌ها
+      </h3>
+      <p class="text-xs text-orange-300/80 mb-4">راهنمایی داخل چالش نیست. با باز کردن هر کدام از امتیازت کم می‌شود.</p>
+      
+      <div class="text-xs text-gray-500 mb-3">امتیاز فعلی تو: <strong class="text-white"><%= userPoints %></strong></div>
+
+      <div id="unlockedHints" class="space-y-2 mb-4">
+        <% if (unlockedHints.length === 0) { %>
+          <p class="text-sm text-gray-500">هنوز راهنمایی باز نکرده‌ای.</p>
+        <% } %>
+        <% unlockedHints.forEach(h => { %>
+          <div class="bg-raven-800 rounded-lg p-3 text-sm">
+            <div class="text-xs text-orange-400 mb-1">راهنمایی <%= h.index + 1 %> (−<%= h.cost %> امتیاز)</div>
+            <div class="text-gray-300"><%= h.text %></div>
+          </div>
+        <% }) %>
+      </div>
+
+      <% if (nextHintIndex !== null && !challenge.solved) { %>
+        <button id="unlockHintBtn" class="w-full border border-orange-500/50 text-orange-300 hover:bg-orange-500/10 py-2.5 rounded-xl text-sm transition">
+          باز کردن راهنمایی بعدی (−<%= nextHintCost %> امتیاز)
+        </button>
+        <p class="text-xs text-gray-500 mt-2 text-center"><%= nextHintIndex + 1 %> از <%= totalHints %></p>
+      <% } else if (totalHints > 0 && unlockedHints.length >= totalHints) { %>
+        <p class="text-xs text-gray-500 text-center">همه راهنمایی‌ها باز شده‌اند.</p>
+      <% } %>
+    </div>
+
+    <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6">
+      <h3 class="font-semibold mb-2">📝 گزارش</h3>
+      <p class="text-sm text-gray-400 mb-4">بعد از پیدا کردن، گزارش حرفه‌ای ثبت کن.</p>
+      <a href="/reports/new?challenge=<%= challenge.id %>" class="block text-center border border-indigo-500/50 text-indigo-300 hover:bg-indigo-500/10 py-2.5 rounded-xl text-sm transition">
+        ثبت گزارش
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const flagForm = document.getElementById('flagForm');
+  if (flagForm) {
+    flagForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const flag = document.getElementById('flagInput').value;
+      const result = document.getElementById('flagResult');
+      const res = await fetch('/challenges/<%= challenge.slug %>/flag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ flag })
+      });
+      const data = await res.json();
+      result.classList.remove('hidden');
+      if (data.success) {
+        result.className = 'mt-3 text-sm bg-green-500/10 border border-green-500/30 text-green-300 rounded-lg p-3';
+        let msg = data.message;
+        if (data.penalty) msg += ` (کسر راهنمایی: ${data.penalty} → خالص: ${data.net})`;
+        else if (data.points) msg += ` (+${data.points})`;
+        result.textContent = msg;
+        setTimeout(() => location.reload(), 1800);
+      } else {
+        result.className = 'mt-3 text-sm bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg p-3';
+        result.textContent = data.message;
+      }
+    });
+  }
+
+  const unlockBtn = document.getElementById('unlockHintBtn');
+  if (unlockBtn) {
+    unlockBtn.addEventListener('click', async () => {
+      if (!confirm('با باز کردن راهنمایی از امتیازت کم می‌شود. ادامه می‌دهی؟')) return;
+      unlockBtn.disabled = true;
+      const res = await fetch('/challenges/<%= challenge.slug %>/hint', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+      const data = await res.json();
+      if (data.success) {
+        location.reload();
+      } else {
+        alert(data.message || 'خطا');
+        unlockBtn.disabled = false;
+      }
+    });
+  }
+</script>
+
+<%- include('../partials/footer') %>

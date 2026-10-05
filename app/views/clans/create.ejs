@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+<div class="max-w-lg mx-auto">
+  <h1 class="text-2xl font-bold mb-6">ساخت کلَن جدید</h1>
+  <% if (error) { %><div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-sm"><%= error %></div><% } %>
+  <form method="POST" class="vk-card space-y-4">
+    <div>
+      <label class="text-sm text-gray-400">نام کلَن</label>
+      <input name="name" required maxlength="32" class="w-full mt-1 vk-input" placeholder="مثلاً ShadowOps">
+    </div>
+    <div>
+      <label class="text-sm" style="color:var(--vk-muted)">تگ یکتا (۳ تا ۵ حرف انگلیسی) — شناسه رسمی کلَن</label>
+      <input name="tag" required minlength="3" maxlength="5" pattern="[A-Za-z0-9]{3,5}" class="vk-input mt-1 font-mono uppercase" placeholder="مثلاً ODIN">
+      <p class="text-[10px] mt-1 opacity-50">بعد از ساخت، کلَن با #تگ و شماره ID داخلی نمایش داده می‌شود و تکراری پذیرفته نمی‌شود.</p>
+    </div>
+    <div>
+      <label class="text-sm text-gray-400">نشان</label>
+      <select name="badge" class="w-full mt-1 vk-input">
+        <option>⚔️</option><option>🛡️</option><option>🔥</option><option>🐉</option><option>🦅</option><option>💀</option><option>⚡</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-sm text-gray-400">توضیح</label>
+      <textarea name="description" rows="3" class="w-full mt-1 vk-input" placeholder="هدف کلَن..."></textarea>
+    </div>
+    <button class="w-full bg-amber-600 hover:bg-amber-500 text-white py-3 rounded-xl font-semibold">ایجاد کلَن</button>
+  </form>
+</div>
+<%- include('../partials/footer') %>

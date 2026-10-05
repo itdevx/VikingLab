@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c0a09">
+  <title><%= typeof title !== 'undefined' ? title : 'Viking Lab' %> | Viking Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/viking.css">
+  <style>@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');</style>
+</head>
+<body class="viking">
+  <nav class="vk-nav">
+    <div class="vk-nav-inner">
+      <a href="/" class="vk-brand">
+        <span>⚔️</span>
+        <span class="vk-brand-gold">Viking Lab</span>
+      </a>
+      <div class="vk-nav-links">
+        <a href="/dashboard">داشبورد</a>
+        <a href="/academy">آکادمی</a>
+        <a href="/lab">هدف‌ها</a>
+        <a href="/clans">کلَن</a>
+        <a href="/clans/wars">جنگ</a>
+        <a href="/arena">آرنا</a>
+        <a href="/reports">گزارش</a>
+      </div>
+      <div class="flex items-center gap-2">
+        <% if (typeof user !== 'undefined' && user) { %>
+          <a href="/clans/notifications" class="relative vk-btn vk-btn-sm" id="navNotif" title="اعلان‌ها">
+            🔔
+            <span class="vk-badge" id="notifBadge" style="display:none">0</span>
+          </a>
+          <a href="/auth/logout" class="vk-btn vk-btn-sm">خروج</a>
+        <% } else { %>
+          <a href="/auth/login" class="vk-btn vk-btn-sm">ورود</a>
+          <a href="/auth/register" class="vk-btn vk-btn-gold vk-btn-sm">ثبت‌نام</a>
+        <% } %>
+        <button type="button" class="vk-menu-btn" id="menuBtn" aria-label="منو">☰</button>
+      </div>
+    </div>
+    <div class="vk-drawer" id="mobileMenu">
+      <a href="/dashboard">داشبورد</a>
+      <a href="/academy">آکادمی</a>
+      <a href="/lab">محیط‌های هدف</a>
+      <a href="/lab/war">WarOps</a>
+      <a href="/lab/network">شبکه</a>
+      <a href="/clans">کلَن‌ها</a>
+      <a href="/clans/wars">جنگ کلَن</a>
+      <a href="/clans/leaderboard">لیدربورد</a>
+      <a href="/arena">آرنا</a>
+      <a href="/reports">گزارش‌ها</a>
+      <a href="/reporting-guide">آموزش گزارش</a>
+    </div>
+  </nav>
+  <main class="vk-main">

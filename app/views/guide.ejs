@@ -1,0 +1,56 @@
+<%- include('partials/header') %>
+
+<div class="max-w-3xl mx-auto prose prose-invert">
+  <h1 class="text-3xl font-bold mb-6">🗺️ راهنمای کامل Viking Lab</h1>
+
+  <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6 mb-8 space-y-4 text-gray-300">
+    <h2 class="text-xl font-semibold text-white">۱. چطور شروع کنیم؟</h2>
+    <ol class="list-decimal list-inside space-y-2 text-sm">
+      <li>ثبت‌نام کن یا با حساب تست وارد شو (<code>hunter@vikinglab.lab / hunter123</code>)</li>
+      <li>به داشبورد برو و درصد پیشرفت را ببین</li>
+      <li>از دسته <strong>A03 Injection</strong> شروع کن (کامل‌ترین دسته)</li>
+      <li>هر چالش را باز کن → به محیط Lab برو و بدون راهنمای رایگان حل کن. اگر گیر کردی، راهنمایی جداگانه بخر (از امتیازت کم می‌شود).</li>
+      <li>با ابزارهایی مثل Burp Suite، browser DevTools، sqlmap تست کن</li>
+      <li>فلگ را پیدا کن و در صفحه چالش submit کن</li>
+      <li>بعد از حل، یک گزارش حرفه‌ای بنویس</li>
+    </ol>
+  </div>
+
+  <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6 mb-8 space-y-4 text-gray-300">
+    <h2 class="text-xl font-semibold text-white">۲. سطح‌بندی چالش‌ها</h2>
+    <ul class="space-y-2 text-sm">
+      <li><span class="text-green-400 font-medium">آسان</span> — بدون فیلتر، payload مستقیم کار می‌کند. مناسب مبتدی.</li>
+      <li><span class="text-yellow-400 font-medium">متوسط</span> — نیاز به تفکر، blind یا stored، کمی فیلتر.</li>
+      <li><span class="text-red-400 font-medium">سخت</span> — فیلتر، second-order، bypass، نیاز به ابزار و صبر.</li>
+    </ul>
+  </div>
+
+  <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6 mb-8 space-y-4 text-gray-300">
+    <h2 class="text-xl font-semibold text-white">۳. ابزارهای پیشنهادی</h2>
+    <ul class="list-disc list-inside space-y-1 text-sm">
+      <li><strong>Burp Suite Community</strong> — Intercept، Repeater، Intruder</li>
+      <li><strong>OWASP ZAP</strong> — اسکنر رایگان</li>
+      <li><strong>sqlmap</strong> — برای SQL Injection</li>
+      <li><strong>ffuf / dirsearch</strong> — برای Force Browsing</li>
+      <li><strong>Browser DevTools</strong> — برای DOM XSS و تحلیل client-side</li>
+    </ul>
+  </div>
+
+  <div class="bg-raven-900 border border-raven-700 rounded-2xl p-6 mb-8 space-y-4 text-gray-300">
+    <h2 class="text-xl font-semibold text-white">۴. مسیر پیشنهادی یادگیری</h2>
+    <ol class="list-decimal list-inside space-y-2 text-sm">
+      <li>A03 Injection (همه ۹ چالش)</li>
+      <li>A01 Broken Access Control</li>
+      <li>A10 SSRF</li>
+      <li>A07 Authentication Failures</li>
+      <li>بقیه دسته‌ها به ترتیب</li>
+    </ol>
+  </div>
+
+  <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-6 text-yellow-200 text-sm">
+    <strong>⚠️ هشدار قانونی:</strong> این آزمایشگاه فقط برای یادگیری روی سیستم خودت است. 
+    تست کردن روی وب‌سایت‌های واقعی بدون مجوز کتبی جرم است.
+  </div>
+</div>
+
+<%- include('partials/footer') %>

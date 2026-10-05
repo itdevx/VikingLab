@@ -1,0 +1,117 @@
+<%- include('../partials/header') %>
+
+<div class="dash-hero mb-6">
+  <h1 class="text-xl sm:text-2xl font-bold mb-1 vk-brand-gold">⚔️ داشبورد Viking Lab</h1>
+  <p class="text-sm" style="color:var(--vk-muted)">پیشرفت چالش‌ها · امتیاز خالص بعد از کسر راهنما</p>
+</div>
+
+<!-- Overall Progress -->
+<div class="bg-[var(--vk-surface)] border border-[var(--vk-border)] rounded-2xl p-6 mb-8">
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+    <div>
+      <div class="text-sm text-amber-500/90 mb-1">پیشرفت کلی</div>
+      <div class="text-4xl font-bold"><%= percent %><span class="text-xl text-gray-400">%</span></div>
+    </div>
+    <div class="text-left">
+      <div class="text-sm text-gray-400">چالش‌های حل‌شده</div>
+      <div class="text-2xl font-semibold"><%= totalSolved %> <span class="text-gray-500 text-lg">/ <%= totalChallenges %></span></div>
+    </div>
+    <div class="text-left">
+      <div class="text-sm text-gray-400">امتیاز خالص (بعد از کسر راهنمایی)</div>
+      <div class="text-2xl font-semibold text-yellow-400"><%= totalPoints %> <span class="text-gray-500 text-lg">/ <%= maxPoints %></span></div>
+      <% if (typeof hintCost !== "undefined" && hintCost > 0) { %><div class="text-xs text-orange-400 mt-1">کسر بابت راهنمایی: −<%= hintCost %></div><% } %>
+    </div>
+  </div>
+  <div class="w-full bg-raven-800 rounded-full h-3 overflow-hidden">
+    <div class="progress-bar bg-gradient-to-l from-amber-700 to-yellow-600 h-3 rounded-full" style="width: <%= percent %>%"></div>
+  </div>
+</div>
+
+<!-- Categories Grid -->
+<div class="grid md:grid-cols-2 gap-5 mb-10">
+  <% categories.forEach(cat => { 
+    const catPercent = cat.total ? Math.round((cat.solved / cat.total) * 100) : 0;
+  %>
+    <a href="/challenges/category/<%= cat.code %>" class="block bg-raven-900 border border-raven-700 hover:border-[var(--vk-gold-dim)] rounded-2xl p-5 transition group border-r-4 border-r-[var(--vk-gold-dim)] shadow-lg shadow-black/20">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <span class=" font-bold text-sm"><%= cat.code %></span>
+          <h3 class="text-lg font-semibold group-hover:text-amber-500/90 transition"><%= cat.name %></h3>
+        </div>
+        <div class="text-left">
+          <div class="text-2xl font-bold <%= catPercent === 100 ? 'text-green-400' : 'text-white' %>"><%= catPercent %>%</div>
+          <div class="text-xs text-gray-500"><%= cat.solved %>/<%= cat.total %></div>
+        </div>
+      </div>
+      
+      <div class="w-full bg-raven-800 rounded-full h-2 mb-3">
+        <div class="progress-bar h-2 rounded-full <%= catPercent === 100 ? 'bg-green-500' : 'bg-indigo-500' %>" style="width: <%= catPercent %>%"></div>
+      </div>
+      
+      <div class="flex gap-2 text-xs">
+        <% const diffs = {easy:0, medium:0, hard:0};
+           cat.challenges.forEach(c => diffs[c.difficulty]++); %>
+        <span class="bg-green-500/20 text-green-300 px-2 py-0.5 rounded">آسان: <%= diffs.easy %></span>
+        <span class="bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded">متوسط: <%= diffs.medium %></span>
+        <span class="bg-red-500/20 text-red-300 px-2 py-0.5 rounded">سخت: <%= diffs.hard %></span>
+      </div>
+    </a>
+  <% }) %>
+</div>
+
+<!-- Clan promo -->
+<div class="mb-8 bg-gradient-to-l from-amber-600/15 to-orange-600/10 border border-amber-500/30 rounded-2xl p-5 flex flex-wrap items-center justify-between gap-3">
+  <div>
+    <div class="font-semibold text-amber-200">⚔️ به یک کلَن بپیوند</div>
+    <div class="text-sm text-gray-400">با تیمت جام جمع کنید — شبیه کلش‌آف‌کلنز</div>
+  </div>
+  <a href="/clans" class="bg-amber-600 hover:bg-amber-500 text-white px-5 py-2 rounded-xl text-sm font-medium">کلَن‌ها</a>
+</div>
+
+<!-- Quick Actions -->
+<div class="grid sm:grid-cols-3 gap-4 mb-10">
+  <a href="/reports/new" class="bg-raven-900 border border-raven-700 hover:border-green-500/40 rounded-xl p-4 flex items-center gap-3 transition">
+    <span class="text-2xl">📝</span>
+    <div>
+      <div class="font-medium">ثبت گزارش جدید</div>
+      <div class="text-xs text-gray-400">استاندارد باگ‌بانتی</div>
+    </div>
+  </a>
+  <a href="/reporting-guide" class="bg-raven-900 border border-raven-700 hover:border-blue-500/40 rounded-xl p-4 flex items-center gap-3 transition">
+    <span class="text-2xl">📚</span>
+    <div>
+      <div class="font-medium">اصول گزارش‌نویسی</div>
+      <div class="text-xs text-gray-400">یاد بگیر حرفه‌ای بنویسی</div>
+    </div>
+  </a>
+  <a href="/guide" class="bg-raven-900 border border-raven-700 hover:border-purple-500/40 rounded-xl p-4 flex items-center gap-3 transition">
+    <span class="text-2xl">🗺️</span>
+    <div>
+      <div class="font-medium">مسیر یادگیری</div>
+      <div class="text-xs text-gray-400">از کجا شروع کنی</div>
+    </div>
+  </a>
+</div>
+
+<% if (recentReports && recentReports.length) { %>
+<div>
+  <h2 class="text-xl font-semibold mb-4">آخرین گزارش‌ها</h2>
+  <div class="space-y-2">
+    <% recentReports.forEach(r => { %>
+      <a href="/reports/<%= r.id %>" class="flex items-center justify-between bg-raven-900 border border-raven-700 rounded-xl px-4 py-3 hover:border-indigo-500/30 transition">
+        <div>
+          <div class="font-medium"><%= r.title %></div>
+          <div class="text-xs text-gray-500"><%= r.challenge_title || 'عمومی' %> • امتیاز کیفیت: <%= r.quality_score %></div>
+        </div>
+        <span class="text-xs px-2 py-1 rounded 
+          <%= r.status === 'accepted' ? 'bg-green-500/20 text-green-300' : 
+              r.status === 'rejected' ? 'bg-red-500/20 text-red-300' : 'bg-yellow-500/20 text-yellow-300' %>">
+          <%= r.status %>
+        </span>
+      </a>
+    <% }) %>
+  </div>
+</div>
+<% } %>
+
+<%- include('../partials/footer') %>

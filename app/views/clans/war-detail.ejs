@@ -1,0 +1,132 @@
+<%- include('../partials/header') %>
+<p class="text-xs mb-4"><a href="/clans/wars" style="color:var(--vk-gold)">← لیست جنگ‌ها</a></p>
+
+<% if (error) { %>
+  <div class="mb-4 text-sm p-3 rounded-xl border border-red-500/40 text-red-300"><%= error %></div>
+<% } %>
+
+<% if (myRole === 'attacker') { %>
+  <div class="mb-4 text-center text-sm font-bold py-2 rounded-xl border border-red-500/50 bg-red-500/15 text-red-300">
+    🗡️ نقش تو: مهاجم (Hunter) — تم قرمز
+  </div>
+<% } else if (myRole === 'defender') { %>
+  <div class="mb-4 text-center text-sm font-bold py-2 rounded-xl border border-blue-500/50 bg-blue-500/15 text-blue-300">
+    🛡️ نقش تو: مدافع (Defender) — تم آبی
+  </div>
+<% } %>
+
+<div class="coc-arena mb-6 <%= myRole === 'attacker' ? 'arena-red' : (myRole === 'defender' ? 'arena-blue' : '') %>">
+  <% if (war.status === 'pending') { %>
+    <div class="text-center text-amber-300 text-sm font-bold mb-3">⏳ در انتظار تأیید لیدر مدافع</div>
+  <% } else if (war.status === 'active') { %>
+    <div class="text-center text-sm font-bold mb-3" style="color:var(--vk-gold)">⚔️ نبرد فعال</div>
+  <% } else if (war.status === 'rejected') { %>
+    <div class="text-center text-red-400 text-sm mb-3">درخواست رد شد</div>
+  <% } else { %>
+    <div class="text-center text-sm opacity-60 mb-3">پایان نبرد</div>
+  <% } %>
+
+  <div class="coc-vs">
+    <div class="coc-side side-attack">
+      <div class="role-tag tag-red">مهاجم</div>
+      <div class="text-3xl mb-1"><%= attacker ? attacker.badge : '⚔️' %></div>
+      <div class="font-bold text-sm"><%= attacker ? attacker.name : '?' %></div>
+      <div class="text-[10px] opacity-50">#<%= attacker ? attacker.tag : '—' %> · ID <%= attacker ? attacker.id : '—' %></div>
+      <div class="coc-score text-red-400"><%= war.score_attacker || 0 %></div>
+    </div>
+    <div class="text-2xl font-black opacity-30">VS</div>
+    <div class="coc-side side-defend">
+      <div class="role-tag tag-blue">مدافع</div>
+      <div class="text-3xl mb-1"><%= defender ? defender.badge : '🛡️' %></div>
+      <div class="font-bold text-sm"><%= defender ? defender.name : '?' %></div>
+      <div class="text-[10px] opacity-50">#<%= defender ? defender.tag : '—' %> · ID <%= defender ? defender.id : '—' %></div>
+      <div class="coc-score text-blue-400"><%= war.score_defender || 0 %></div>
+    </div>
+  </div>
+
+  <% if (war.status === 'active' || war.status === 'finished') {
+    const total = Math.max(1, (war.score_attacker||0)+(war.score_defender||0));
+    const pctA = Math.round(((war.score_attacker||0)/total)*100);
+  %>
+  <div class="mt-4">
+    <div class="flex justify-between text-[10px] mb-1 opacity-60">
+      <span class="text-red-400">مهاجم <%= pctA %>%</span>
+      <span class="text-blue-400">مدافع <%= 100-pctA %>%</span>
+    </div>
+    <div class="coc-bar"><i style="width:<%= pctA %>%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></i></div>
+  </div>
+  <% } %>
+
+  <% if (war.status === 'active') { %>
+    <p class="text-center text-xs mt-4 opacity-70">مانده حدود <%= endsInHours %> ساعت و <%= endsInMins %> دقیقه</p>
+  <% } %>
+  <% if (war.status === 'finished' && war.winner_id) { %>
+    <p class="text-center mt-4 font-bold" style="color:var(--vk-gold)">
+      برنده: <%= war.winner_id === war.attacker_id ? (attacker && attacker.name) : (defender && defender.name) %> (+۵۰ جام)
+    </p>
+  <% } %>
+</div>
+
+<% if (war.status === 'pending' && isDefenderLeader) { %>
+  <div class="vk-card mb-6 border border-amber-500/40 text-center">
+    <p class="text-sm mb-4">لیدر مدافع هستی — درخواست جنگ را بپذیر یا رد کن</p>
+    <div class="flex justify-center gap-3 flex-wrap">
+      <form method="POST" action="/clans/wars/<%= war.id %>/accept">
+        <button class="vk-btn vk-btn-gold px-6">قبول نبرد ⚔️</button>
+      </form>
+      <form method="POST" action="/clans/wars/<%= war.id %>/reject">
+        <button class="vk-btn border border-red-500/50 text-red-300 px-6">رد کردن</button>
+      </form>
+    </div>
+  </div>
+<% } else if (war.status === 'pending') { %>
+  <div class="vk-card mb-6 text-center text-sm opacity-70">
+    منتظر تأیید لیدر کلَن مدافع بمانید…
+  </div>
+<% } %>
+
+
+<% if (war.status === 'active' && war.challenge_pool && war.challenge_pool.length) { %>
+  <div class="vk-card mb-6">
+    <h2 class="font-bold text-sm mb-2" style="color:var(--vk-gold)">🎯 مأموریت‌های این نبرد (تصادفی · متوسط تا سخت)</h2>
+    <p class="text-xs mb-3 opacity-70">هر دو تیم باید همین چالش‌ها را حل کنند. هر جنگ بستهٔ جداگانه‌ای دارد.</p>
+    <div class="space-y-2">
+      <% war.challenge_pool.forEach((ch, i) => { %>
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs p-2.5 rounded-lg border border-[var(--vk-border)] bg-[var(--vk-bg)]">
+          <div>
+            <span class="opacity-50"><%= i+1 %>.</span>
+            <strong><%= ch.title %></strong>
+            <span class="opacity-50"> · <%= ch.category %> · <%= ch.difficulty %></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span style="color:var(--vk-gold)"><%= ch.points %> امتیاز</span>
+            <% if (ch.lab_path) { %><a href="<%= ch.lab_path %>" class="vk-btn vk-btn-sm" target="_blank">Lab</a><% } %>
+            <a href="/challenges/<%= ch.slug %>" class="vk-btn vk-btn-sm vk-btn-gold">ثبت فلگ</a>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+<% } %>
+
+<% if (war.status === 'active') { %>
+  <div class="vk-card mb-4 text-xs opacity-80">
+    فقط چالش‌های <strong>WAR</strong> در WarOps برای این نبرد امتیاز می‌آورند.
+  </div>
+  <div class="flex flex-wrap gap-2 mb-6">
+    <a href="/lab/war" class="vk-btn vk-btn-gold text-sm"><%= myRole === 'defender' ? 'دفاع در WarOps' : 'حمله در WarOps' %></a>
+    <a href="/challenges/category/WAR" class="vk-btn text-sm">لیست چالش WAR</a>
+  </div>
+<% } %>
+
+<h2 class="font-semibold text-sm mb-2">لاگ نبرد</h2>
+<div class="space-y-2">
+  <% if (!solveDetails.length) { %><p class="text-xs opacity-50">هنوز امتیازی ثبت نشده</p><% } %>
+  <% solveDetails.forEach(s => { %>
+    <div class="vk-card !py-2 !px-3 text-xs flex justify-between gap-2">
+      <span><%= s.username %> · <%= s.challenge %></span>
+      <span style="color:var(--vk-gold)">+<%= s.points %></span>
+    </div>
+  <% }) %>
+</div>
+<%- include('../partials/footer') %>
